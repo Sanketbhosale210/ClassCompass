@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.app.dto.StudentDTO;
 import com.app.entities.Student;
+import com.app.mapper.StudentMapper;
 import com.app.service.StudentService;
 
 @RestController
@@ -29,18 +30,21 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
+    @Autowired
+    StudentMapper studentMapper;
+    
     @PostMapping
     public ResponseEntity<Student> createStudent(@RequestBody Student student) {
         return ResponseEntity.ok(studentService.saveStudent(student));
     }
 //
     @PostMapping("/login")
-    public ResponseEntity<Student> login(@RequestBody Student student) {
+    public ResponseEntity<StudentDTO> login(@RequestBody Student student) {
        System.out.println("in student	 login");
     	Student existingstudent = studentService.getStudentByEmail(student.getEmail());
         if (existingstudent != null && existingstudent.getPassword().equals(student.getPassword())) {
             // In a real application, generate a token and return it
-        	 return ResponseEntity.status(HttpStatus.CREATED).body(existingstudent); // Placeholder response
+        	 return ResponseEntity.status(HttpStatus.CREATED).body(studentMapper.toDTO(existingstudent)); // Placeholder response
         } else {
             return ResponseEntity.status(401).body(null);
         }
@@ -48,7 +52,7 @@ public class StudentController {
 
     
     @GetMapping("/all")
-    public ResponseEntity<List<Student>> getAllStudents() {
+    public ResponseEntity<List<StudentDTO>> getAllStudents() {
         return ResponseEntity.ok(studentService.getAllStudents());
     }
 

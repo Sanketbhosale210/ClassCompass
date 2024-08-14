@@ -40,7 +40,10 @@ public class StudentMapper {
         // Set department ID
         if (student.getDepartment() != null) {
             dto.setDepartment(student.getDepartment().getId());
+            dto.setDepartmentName(student.getDepartment().getName());
+            System.out.println(student.getDepartment().getName());
         }
+  
         return dto;
     }
 }

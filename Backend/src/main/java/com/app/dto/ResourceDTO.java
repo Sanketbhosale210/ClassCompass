@@ -1,6 +1,18 @@
 package com.app.dto;
 public class ResourceDTO {
    
+	
+	private String id;
+	public String getId() {
+		return id;
+	}
+
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+
 	public String getDownloadURL() {
 		return downloadURL;
 	}
@@ -34,6 +46,12 @@ public class ResourceDTO {
 		this.subjectName = subjectName;
 	}
 
+    public ResourceDTO(String id, String filename, String fileType, String subjectName) {
+        this.id = id;
+        this.fileName = filename;
+        this.fileType = fileType;
+        this.subjectName = subjectName;
+    }
 
 	public void setFilesize(long filesize) {
 		this.filesize = filesize;

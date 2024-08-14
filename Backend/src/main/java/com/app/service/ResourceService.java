@@ -40,10 +40,13 @@ public class ResourceService {
     		{
     			throw new Exception("file name contains inva;id sequesnce");
     		}
-    		Resource newResource=new Resource(filename,resourceFile.getContentType(),resourceFile.getBytes());
+    		Subject subject=subjectRepository.findById(subjectId).orElseThrow();
+    		
+    		Resource newResource=new Resource(filename,resourceFile.getContentType(),resourceFile.getBytes(),subject);
     		return resourceRepository.save(newResource);
     	}catch(Exception e)
     	{
+    		e.printStackTrace();
     	throw new Exception("could not save file");	
     	}
         
@@ -55,13 +58,14 @@ public class ResourceService {
     }
     
     
-//    public List<ResourceDTO> getResourcesByDepartment(Long departmentId) {
-//        List<Resource> resources = resourceRepository.findBySubjectDepartmentId(departmentId);
-//        return resources.stream().map(this::convertToDTO).collect(Collectors.toList());
-//    }
+    public List<ResourceDTO> getResourcesByDepartment(Long departmentId) {
+        List<Resource> resources = resourceRepository.findBySubjectDepartmentId(departmentId);
+        return resources.stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
 
     private ResourceDTO convertToDTO(Resource resource) {
         ResourceDTO dto = new ResourceDTO();
+        dto.setId(resource.getId());
         dto.setFileName(resource.getFilename());
         dto.setSubjectName(resource.getSubject().getName()); // Assuming you have a method to get the subject name
         return dto;
@@ -112,9 +116,22 @@ public class ResourceService {
 //    }
 
 
-	public Resource getAttachment(Long fileid) {
+	public Resource getAttachment(String fileid) {
 		// TODO Auto-generated method stub
 		
-		return resourceRepository.findById(fileid).orElseThrow();
+		return resourceRepository.findById(fileid).orElse(null);
 	}
+	public List<ResourceDTO> getAllResources() {
+        return resourceRepository.findAll().stream()
+                .map(resource -> new ResourceDTO(
+                        resource.getId(),
+                        resource.getFilename(),
+                        resource.getFileType(),
+                        resource.getSubject().getName()))
+                .collect(Collectors.toList());
+    }
+
+    public void deleteResource(String resourceId) {
+        resourceRepository.deleteById(resourceId);
+    }
 }

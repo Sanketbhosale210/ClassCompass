@@ -20,7 +20,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "subjects")
 public class Subject {
 
-    @Id
+    public Set<Resource> getResources() {
+		return resources;
+	}
+
+	public void setResources(Set<Resource> resources) {
+		this.resources = resources;
+	}
+
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -32,7 +40,7 @@ public class Subject {
     @JsonIgnore // Avoid serializing this field
     private Department department;
 
-    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL)
     private Set<Resource> resources;
     public Set<Assignment> getAssignments() {
 		return assignments;

@@ -1,12 +1,24 @@
 package com.app.dto;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class AssignmentDTO {
     private Long id;
     private String name;
     private String question;
-    private LocalDateTime deadline;
+    private LocalDate deadline;
+    private Long subjectId;
+    private String subjectName;
+	public Long getSubjectId() {
+		return subjectId;
+	}
+	
+	public String getSubjectName() {
+		return subjectName;
+	}
+	public void setSubjectName(String subjectName) {
+		this.subjectName = subjectName;
+	}
 	public Long getId() {
 		return id;
 	}
@@ -25,11 +37,14 @@ public class AssignmentDTO {
 	public void setQuestion(String question) {
 		this.question = question;
 	}
-	public LocalDateTime getDeadline() {
+	public LocalDate getDeadline() {
 		return deadline;
 	}
-	public void setDeadline(LocalDateTime deadline) {
-		this.deadline = deadline;
+	public void setDeadline(LocalDate localDate) {
+		this.deadline = localDate;
+	}
+	public void setSubjectId(Long subjectId) {
+		this.subjectId=subjectId;
 	}
 
     // Getters and setters

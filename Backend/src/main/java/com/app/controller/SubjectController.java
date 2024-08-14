@@ -35,8 +35,8 @@ public class SubjectController {
     }
     
     @GetMapping("/getSubjectsByDepartment")
-    public ResponseEntity<List<Subject>> getSubjectsByDepartment(@RequestParam Long departmentId) {
-        List<Subject> subjects = subjectService.getSubjectsByDepartment(departmentId);
+    public ResponseEntity<List<SubjectDTO>> getSubjectsByDepartment(@RequestParam Long departmentId) {
+        List<SubjectDTO> subjects = subjectService.getSubjectsByDepartment(departmentId);
         subjects.forEach(s->System.out.println(s.getName()));
         return ResponseEntity.ok(subjects);
     }

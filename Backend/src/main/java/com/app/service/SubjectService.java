@@ -1,5 +1,6 @@
 package com.app.service;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Service;
 import com.app.dao.SubjectRepository;
 import com.app.dto.SubjectDTO;
 import com.app.entities.Subject;
+import com.app.mapper.DepartmentMapper;
+import com.app.mapper.SubjectMapper;
 
 @Service
 public class SubjectService {
@@ -19,12 +22,17 @@ public class SubjectService {
     private SubjectRepository subjectRepository;
 
     @Autowired
+    DepartmentMapper departmentMapper;
+    @Autowired
+    SubjectMapper mapper;
+    
+    @Autowired
     private ModelMapper modelMapper; // Or use manual mapping
   
     public List<SubjectDTO> getAllSubjects() {
         List<Subject> subjects = subjectRepository.findAll();
         return subjects.stream()
-                .map(subject -> modelMapper.map(subject, SubjectDTO.class))
+                .map(subject ->mapper.toDTO(subject))
                 .collect(Collectors.toList());
     }
 
@@ -45,10 +53,15 @@ public class SubjectService {
     public Subject addSubject(Subject subject) {
         return subjectRepository.save(subject);
     }
-    public List<Subject> getSubjectsByDepartment(Long departmentId) {
+    public List<SubjectDTO> getSubjectsByDepartment(Long departmentId) {
         List<Subject> subjects = subjectRepository.findByDepartmentId(departmentId);
 //        return subjects.stream().map(subject -> modelMapper.map(subjects, SubjectDTO.class)).collect(Collectors.toList());
-        return subjects;
+
+        List<SubjectDTO> subjectDtos = subjects.stream()
+            .map(departmentMapper::toDTO)
+            .collect(Collectors.toList());
+
+        return subjectDtos;
     }
 
 	public Optional<Subject> findById(Long subjectId) {

@@ -16,12 +16,12 @@ public class WebConfig implements WebMvcConfigurer {
 //                .allowedHeaders("*")
 //                .allowCredentials(true);
 //    }
-////}
- public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/api/**") // allow CORS for paths matching /api/**
-                .allowedOrigins("http://localhost:3000") // allow only this origin
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // allow these HTTP methods
-                .allowedHeaders("*") // allow all headers
-                .allowCredentials(true); // allow credentials (cookies, etc.)
+	@Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/api/**")
+                .allowedOrigins("http://localhost:3000")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("*")
+                .allowCredentials(true);
     }
 }

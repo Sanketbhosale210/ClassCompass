@@ -1,6 +1,5 @@
 package com.app.dto;
 
-import com.app.entities.Subject;
 
 public class SubjectDTO {
     private Long id;
@@ -18,8 +17,15 @@ public class SubjectDTO {
 		this.name = name;
 	}
 	private String name;
-
+private String departmentName;
     // Getters and Setters
+
+public String getDepartmentName() {
+	return departmentName;
+}
+public void setDepartmentName(String departmentName) {
+	this.departmentName = departmentName;
+}
 }
 
 // FacultyDTO.java

@@ -10,10 +10,17 @@ public class StudentDTO implements Serializable{
     private String email;
     private byte[] image;
     private String password;
-    public StudentDTO(String prnno2, String fname2, String lname2, String email2, String password2, byte[] image2) {
-		// TODO Auto-generated constructor stub
+    private String departmentName;
+	public String getDepartmentName() {
+		return departmentName;
+	}
+	public void setDepartmentName(String departmentName) {
+		this.departmentName = departmentName;
 	}
 	public StudentDTO() {
+		// TODO Auto-generated constructor stub
+	}
+	public StudentDTO(String prnno2, String fname2, String lname2, String email2, String password2, byte[] image2) {
 		// TODO Auto-generated constructor stub
 	}
 	public String getPassword() {

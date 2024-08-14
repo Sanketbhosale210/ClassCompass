@@ -1,20 +1,24 @@
 package com.app.entities;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
+
 @Entity
 @Table(name = "resources")
 public class Resource {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	 @Id
+	    @GeneratedValue(generator = "UUID")
+	    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+	    @Column(updatable = false, nullable = false)
+	    private String id;
 
     private String filename; // Name of the resource
 
@@ -25,10 +29,11 @@ public class Resource {
 
    
 
-	public Resource(String filename, String contentType, byte[] bytes) {
+	public Resource(String filename, String contentType, byte[] bytes,Subject subject) {
 		this.filename=filename;
 		fileType=contentType;
 		data=bytes;
+		this.subject=subject;
 	}
 
 
@@ -39,13 +44,13 @@ public class Resource {
 
 
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
 
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
