@@ -139,7 +139,7 @@ const ViewTimetable = () => {
           console.log('Fetched timetables:', response.data); // Log the fetched timetables
 
           // Filter timetables based on the logged-in user's department
-          const filteredTimetables = response.data.filter(timetable => timetable.dept === storedUser.department.name);
+          const filteredTimetables = response.data.filter(timetable => timetable.dept === storedUser.departmentName);
 
           setTimetables(filteredTimetables);
           setDataFetched(true); // Set flag to true to indicate that data has been fetched

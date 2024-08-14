@@ -15,6 +15,7 @@ const NoticePage = () => {
   const history = useHistory();
 
   useEffect(() => {
+    console.log("Fetching notices...");
     fetchNotices();
   }, []);
 
@@ -50,23 +51,29 @@ const NoticePage = () => {
       .catch(error => {
         console.error('Error registering notice:', error);
         if (error.response) {
-          // Server responded with a status other than 2xx
           alert('Error: ' + error.response.data.message || 'Unknown server error');
         } else if (error.request) {
-          // Request was made but no response received
           alert('Network error. Please check your connection.');
         } else {
-          // Something else caused the error
           alert('Error: ' + error.message);
         }
       });
   };
 
+  const handleDelete = (id) => {
+    if (window.confirm('Are you sure you want to delete this notice?')) {
+      axios.delete(`http://localhost:8080/api/notices/${id}`)
+        .then(() => {
+          setNotices(notices.filter(notice => notice.id !== id));
+          console.log('Notice deleted successfully');
+        })
+        .catch(error => console.error('Error deleting notice:', error));
+    }
+  };
+
   return (
     <div className="notice-page">
-      <button className="back-button" onClick={() => history.push('/dashboard')}>
-        Back to Dashboard
-      </button>
+     
       <div className="notice-form">
         <h1>Notice Registration</h1>
         <form onSubmit={handleSubmit}>
@@ -146,6 +153,7 @@ const NoticePage = () => {
               <th>Date</th>
               <th>Notice</th>
               <th>Department</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -158,6 +166,11 @@ const NoticePage = () => {
                 <td>{new Date(notice.date).toLocaleDateString()}</td>
                 <td>{notice.notice}</td>
                 <td>{notice.department}</td>
+                <td>
+                  <button className="delete-button" onClick={() => handleDelete(notice.id)}>
+                    Delete
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>

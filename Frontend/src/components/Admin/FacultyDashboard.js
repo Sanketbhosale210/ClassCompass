@@ -5,7 +5,15 @@ import FacultyNavbar from '../Faculty/FacultyNavbar';
 import "../styles/AddFaculty.css";
 
 const AddFaculty = () => {
-    const [faculty, setFaculty] = useState({ id: '', fname: '', lname: '', email: '', password: '', subjectId: '', department: '' });
+    const [faculty, setFaculty] = useState({
+        id: '',
+        fname: '',
+        lname: '',
+        email: '',
+        password: '',
+        subjectId: '',
+        department: ''
+    });
     const [subjects, setSubjects] = useState([]);
     const [faculties, setFaculties] = useState([]);
     const [search, setSearch] = useState('');
@@ -48,7 +56,15 @@ const AddFaculty = () => {
                 await addFaculty(faculty);
                 alert('Faculty added successfully!');
             }
-            setFaculty({ id: '', fname: '', lname: '', email: '', password: '', subjectId: '', department: '' });
+            setFaculty({
+                id: '',
+                fname: '',
+                lname: '',
+                email: '',
+                password: '',
+                subjectId: '',
+                department: ''
+            });
             setEditing(false);
             loadFaculties(); // Reload faculty list after submission
             setShowForm(false); // Hide form after submission
@@ -79,7 +95,7 @@ const AddFaculty = () => {
             fname: faculty.fname,
             lname: faculty.lname,
             email: faculty.email,
-            password: '',
+            password: '', // Clear password for editing
             subjectId: faculty.subjectId || '',
             department: faculty.department || '',
         });
@@ -104,12 +120,12 @@ const AddFaculty = () => {
                 <div className="faculty-form">
                     <h1>{editing ? 'Edit Faculty' : 'Add Faculty'}</h1>
                     <form onSubmit={handleSubmit}>
-                        {/* Form Fields for Faculty */}
                         <div className="form-group">
                             <label>First Name</label>
                             <input
                                 type="text"
                                 name="fname"
+                                class="addF"
                                 value={faculty.fname}
                                 onChange={e => setFaculty({ ...faculty, fname: e.target.value })}
                                 required
@@ -120,6 +136,7 @@ const AddFaculty = () => {
                             <input
                                 type="text"
                                 name="lname"
+                                class="addF"
                                 value={faculty.lname}
                                 onChange={e => setFaculty({ ...faculty, lname: e.target.value })}
                                 required
@@ -130,6 +147,7 @@ const AddFaculty = () => {
                             <input
                                 type="email"
                                 name="email"
+                                class="addF"
                                 value={faculty.email}
                                 onChange={e => setFaculty({ ...faculty, email: e.target.value })}
                                 required
@@ -140,6 +158,7 @@ const AddFaculty = () => {
                             <input
                                 type="password"
                                 name="password"
+                                class="addF"
                                 value={faculty.password}
                                 onChange={e => setFaculty({ ...faculty, password: e.target.value })}
                                 required={!editing}
@@ -149,6 +168,7 @@ const AddFaculty = () => {
                             <label>Subject</label>
                             <select
                                 name="subjectId"
+                                class="addF"
                                 value={faculty.subjectId}
                                 onChange={e => setFaculty({ ...faculty, subjectId: e.target.value })}
                                 required
@@ -163,11 +183,13 @@ const AddFaculty = () => {
                             <label>Department</label>
                             <select
                                 name="department"
+                                class="addF"
                                 value={faculty.department}
                                 onChange={e => setFaculty({ ...faculty, department: e.target.value })}
                                 required
                             >
                                 <option value="" disabled>Select Department</option>
+                                {/* Adjust department options as needed */}
                                 <option value="1">PG-DAC</option>
                                 <option value="2">PG-DESD</option>
                                 <option value="3">PG-DBDA</option>
@@ -188,7 +210,7 @@ const AddFaculty = () => {
             <div className="search-bar">
                 <input
                     type="text"
-                    placeholder="Search by name or department"
+                    placeholder="Search by first name or last name"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                 />
@@ -200,7 +222,7 @@ const AddFaculty = () => {
                     <table>
                         <thead>
                             <tr>
-                                <th>id</th>
+                                <th>ID</th>
                                 <th>First Name</th>
                                 <th>Last Name</th>
                                 <th>Email</th>
@@ -210,25 +232,25 @@ const AddFaculty = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {faculties.filter(faculty =>
-                                faculty.fname.toLowerCase().includes(search.toLowerCase()) ||
-                                faculty.department.toLowerCase().includes(search.toLowerCase())
-                            ).map(faculty => (
-                                <tr key={faculty.id}>
-                                    <td>{faculty.id}</td>
-                                    <td>{faculty.fname}</td>
-                                    <td>{faculty.lname}</td>
-                                    <td>{faculty.email}</td>
-                                    <td>{faculty.subjectName ? faculty.subjectName : 'N/A'}</td>
-                                    <td>{faculty.departmentName ? faculty.departmentName : 'N/A'}</td>
-                                    <td>
-                                        <button onClick={() => handleEdit(faculty)}>Edit</button>
-                                    </td>
-                                    <td>
-                                        <button onClick={() => handleDelete(faculty.id)}>Delete</button>
-                                    </td>
-                                </tr>
-                            ))}
+                            {faculties
+                                .filter(faculty =>
+                                    faculty.fname.toLowerCase().includes(search.toLowerCase()) ||
+                                    faculty.lname.toLowerCase().includes(search.toLowerCase())
+                                )
+                                .map(faculty => (
+                                    <tr key={faculty.id}>
+                                        <td>{faculty.id}</td>
+                                        <td>{faculty.fname}</td>
+                                        <td>{faculty.lname}</td>
+                                        <td>{faculty.email}</td>
+                                        <td>{faculty.subjectName || 'N/A'}</td>
+                                        <td>{faculty.departmentName || 'N/A'}</td>
+                                        <td>
+                                            <button onClick={() => handleEdit(faculty)}>Edit</button>
+                                            <button onClick={() => handleDelete(faculty.id)}>Delete</button>
+                                        </td>
+                                    </tr>
+                                ))}
                         </tbody>
                     </table>
                 )}

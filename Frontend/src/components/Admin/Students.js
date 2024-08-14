@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Link, Route, Switch, useRouteMatch } from 'react-router-dom';
+import { Route, Switch, useRouteMatch } from 'react-router-dom';
 import AddStudent from './AddStudent';
-import { deleteStudent, getAllStudents, updateStudent, } from '../../services/studentApi';
+import { deleteStudent, getAllStudents, updateStudent } from '../../services/studentApi';
+import '../styles/Student.css';
 
 const Students = () => {
-  let { path, url } = useRouteMatch();
+  let { path } = useRouteMatch();
   const [students, setStudents] = useState([]);
   const [editStudent, setEditStudent] = useState(null);
   const [form, setForm] = useState({
@@ -13,7 +14,7 @@ const Students = () => {
     lname: '',
     email: '',
     password: '',
-    image: null
+    image: null,
   });
 
   useEffect(() => {
@@ -37,7 +38,7 @@ const Students = () => {
       lname: student.lname,
       email: student.email,
       password: student.password,
-      image: null
+      image: null,
     });
   };
 
@@ -45,117 +46,55 @@ const Students = () => {
     const { name, value } = e.target;
     setForm({
       ...form,
-      [name]: value
+      [name]: value,
     });
   };
 
   const handleFileChange = (e) => {
     setForm({
       ...form,
-      image: e.target.files[0]
+      image: e.target.files[0],
     });
   };
 
-  // const handleUpdate = async () => {
-  //   if (!form.prnno || !Number.isInteger(parseInt(form.prnno))) {
-  //       console.error('Invalid PRN number:', form.prnno);
-  //       alert('Invalid PRN number. Please check the student information.');
-  //       return;
-  //   }
-
-  //   if (window.confirm('Are you sure you want to update this student?')) {
-  //       try {
-  //           const formData = new FormData();
-  //           Object.keys(form).forEach(key => formData.append(key, form[key]));
-
-  //           await updateStudent(form.prnno, formData);
-  //           await fetchStudents(); // Refresh student list
-  //           setEditStudent(null);
-  //           setForm({
-  //               prnno: '',
-  //               fname: '',
-  //               lname: '',
-  //               email: '',
-  //               password: '',
-  //               image: null
-  //           });
-  //           alert('Student updated successfully!');
-  //       } catch (error) {
-  //           console.error('Failed to update student:', error);
-  //           alert('Failed to update student.');
-  //       }
-  //   }
-  // };
-//   const handleUpdate = async () => {
-//     if (!form.prnno || !Number.isInteger(parseInt(form.prnno))) {
-//         console.error('Invalid PRN number:', form.prnno);
-//         alert('Invalid PRN number. Please check the student information.');
-//         return;
-//     }
-
-//     if (window.confirm('Are you sure you want to update this student?')) {
-//         try {
-//             const formData = new FormData();
-//             formData.append('prnno', form.prnno);
-//             formData.append('fname', form.fname);
-//             formData.append('lname', form.lname);
-//             formData.append('email', form.email);
-//             formData.append('password', form.password);
-//             if (form.image) formData.append('image', form.image);
-
-//             await updateStudent(form.prnno, formData);
-//             await fetchStudents(); // Refresh student list
-//             setEditStudent(null);
-//             setForm({
-//                 prnno: '',
-//                 fname: '',
-//                 lname: '',
-//                 email: '',
-//                 password: '',
-//                 image: null
-//             });
-//             alert('Student updated successfully!');
-//         } catch (error) {
-//             console.error('Failed to update student:', error);
-//             alert('Failed to update student.');
-//         }
-//     }
-// };
-
-const handleUpdate = async () => {
-  if (!form.prnno || !Number.isInteger(parseInt(form.prnno))) {
+  const handleUpdate = async () => {
+    if (!form.prnno || !Number.isInteger(parseInt(form.prnno))) {
       console.error('Invalid PRN number:', form.prnno);
       alert('Invalid PRN number. Please check the student information.');
       return;
-  }
+    }
 
-  if (window.confirm('Are you sure you want to update this student?')) {
+    if (window.confirm('Are you sure you want to update this student?')) {
       try {
-          const formData = new FormData();
-          formData.append('fname', form.fname);
-          formData.append('lname', form.lname);
-          formData.append('email', form.email);
-          formData.append('password', form.password);
-          if (form.image) formData.append('image', form.image);
+        const formData = new FormData();
+        formData.append('fname', form.fname);
+        formData.append('lname', form.lname);
+        formData.append('email', form.email);
+        formData.append('password', form.password);
+        if (form.image) formData.append('image', form.image);
 
-          await updateStudent(form.prnno, formData);
-          await fetchStudents(); // Refresh student list
-          setEditStudent(null);
-          setForm({
-              prnno: '',
-              fname: '',
-              lname: '',
-              email: '',
-              password: '',
-              image: null
-          });
-          alert('Student updated successfully!');
+        await updateStudent(form.prnno, formData);
+        await fetchStudents(); // Refresh student list
+        setEditStudent(null);
+        setForm({
+          prnno: '',
+          fname: '',
+          lname: '',
+          email: '',
+          password: '',
+          image: null,
+        });
+        alert('Student updated successfully!');
       } catch (error) {
+        if (error.response && error.response.status === 409) {
+          alert('Failed to update student: Email already in use.');
+        } else {
           console.error('Failed to update student:', error);
           alert('Failed to update student.');
+        }
       }
-  }
-};
+    }
+  };
 
   const handleDelete = async (prnno) => {
     if (window.confirm('Are you sure you want to delete this student?')) {
@@ -170,45 +109,51 @@ const handleUpdate = async () => {
   };
 
   return (
-    <div>
+    <div className="student-page">
       <h2>Students</h2>
-      <ul>
-        <li><Link to={`${url}/add-student`}>Add Student</Link></li>
-      </ul>
+      <hr></hr>
+      <button
+        className="btn-add-student"
+        onClick={() => window.location.href = `${path}/add-student`}
+      >
+        Add Student
+      </button>
 
-      <table>
-        <thead>
-          <tr>
-            <th>PRN</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Email</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {students.map(student => (
-            <tr key={student.prnno}>
-              <td>{student.prnno}</td>
-              <td>{student.fname}</td>
-              <td>{student.lname}</td>
-              <td>{student.email}</td>
-              <td>
-                <div style={{ display: 'flex', gap: '10px' }}>
-                  <button onClick={() => handleEdit(student)}>Edit</button>
-                  <button onClick={() => handleDelete(student.prnno)}>Delete</button>
-                </div>
-              </td>
+      <div className="department-table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>PRN</th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Email</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {students.map((student) => (
+              <tr key={student.prnno}>
+                <td>{student.prnno}</td>
+                <td>{student.fname}</td>
+                <td>{student.lname}</td>
+                <td>{student.email}</td>
+                <td>
+                  <div style={{ display: 'flex', gap: '10px' }}>
+                    <button onClick={() => handleEdit(student)}>Edit</button>
+                    <button onClick={() => handleDelete(student.prnno)}>Delete</button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       {editStudent && (
-        <div className="edit-form">
+        <div className="student-form-container">
           <h3>Edit Student</h3>
-          <form>
-            <div>
+          <form className="student-form">
+            <div className="form-group">
               <label>First Name</label>
               <input
                 type="text"
@@ -218,7 +163,7 @@ const handleUpdate = async () => {
                 required
               />
             </div>
-            <div>
+            <div className="form-group">
               <label>Last Name</label>
               <input
                 type="text"
@@ -228,7 +173,7 @@ const handleUpdate = async () => {
                 required
               />
             </div>
-            <div>
+            <div className="form-group">
               <label>Email</label>
               <input
                 type="email"
@@ -238,7 +183,7 @@ const handleUpdate = async () => {
                 required
               />
             </div>
-            <div>
+            <div className="form-group">
               <label>Password</label>
               <input
                 type="password"
@@ -248,7 +193,7 @@ const handleUpdate = async () => {
                 required
               />
             </div>
-            <div>
+            <div className="form-group">
               <label>Image</label>
               <input
                 type="file"
@@ -256,8 +201,8 @@ const handleUpdate = async () => {
                 onChange={handleFileChange}
               />
             </div>
-            <button type="button" onClick={handleUpdate}>Update Student</button>
-            <button type="button" onClick={() => setEditStudent(null)}>Cancel</button>
+            <button className="btn-update" type="button" onClick={handleUpdate}>Update</button>
+            <button className="btn-cancel" type="button" onClick={() => setEditStudent(null)}>Cancel</button>
           </form>
         </div>
       )}
